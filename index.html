@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotstar Tollywood Special</title>
+    <style>
+        /* CSS: Layout & Theme */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #0c111b; font-family: 'Roboto', sans-serif; color: #fff; }
+        
+        .navbar {
+            width: 100%; height: 80px; display: flex; align-items: center;
+            padding: 0 4%; background: rgba(12, 17, 27, 0.95);
+            position: fixed; top: 0; z-index: 1000;
+        }
+        .logo { width: 120px; }
+        .nav-links { list-style: none; display: flex; margin-left: 50px; }
+        .nav-links li { margin-right: 25px; color: #8f98b2; cursor: pointer; font-weight: 500; }
+        .nav-links li:hover { color: #fff; }
+
+        /* Hero Banner */
+        .hero {
+            margin-top: 80px; width: 100%; height: 80vh;
+            position: relative; background: linear-gradient(to right, #0c111b 10%, transparent), url('https://img1.hotstarext.com/image/upload/f_auto,t_web_m_1x/sources/r1/cms/prod/4252/1364252-h-243e3d646b9c');
+            background-size: cover; background-position: center;
+            display: flex; align-items: center; padding: 0 5%;
+        }
+        .hero-content h1 { font-size: 50px; margin-bottom: 15px; }
+        .hero-content p { font-size: 18px; color: #8f98b2; max-width: 600px; margin-bottom: 25px; }
+        .play-btn { 
+            background: #fff; color: #000; padding: 12px 35px; 
+            border: none; border-radius: 4px; font-weight: bold; cursor: pointer;
+        }
+
+        /* Movie Horizontal Lists */
+        .section-container { padding: 40px 0 0 4%; }
+        .section-title { font-size: 22px; margin-bottom: 15px; font-weight: 600; color: #e1e6f0; }
+        
+        .card-container {
+            display: flex; gap: 15px; overflow-x: auto;
+            padding: 10px 0 20px 0; scroll-behavior: smooth;
+        }
+        .card-container::-webkit-scrollbar { display: none; }
+
+        .card {
+            min-width: 180px; height: 260px; border-radius: 8px;
+            overflow: hidden; transition: 0.3s ease-in-out; cursor: pointer;
+            position: relative; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card:hover { transform: scale(1.1); z-index: 5; border: 2px solid #fff; }
+        .card img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .card-overlay {
+            position: absolute; bottom: 0; width: 100%; height: 40%;
+            background: linear-gradient(transparent, #0c111b);
+            display: flex; align-items: flex-end; padding: 10px;
+            font-size: 14px; font-weight: bold; opacity: 0; transition: 0.3s;
+        }
+        .card:hover .card-overlay { opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <img src="https://secure-media.hotstar.com/web-assets/prod/images/brand-logos/disney-hotstar-logo-dark.svg" class="logo">
+        <ul class="nav-links">
+            <li>TV</li><li>Movies</li><li>Sports</li><li>Disney+</li><li><b>Telugu</b></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Game Changer</h1>
+            <p>An honest IAS officer fights against a corrupt political system to revolutionize the election process. Starring Ram Charan.</p>
+            <button class="play-btn">▶ WATCH NOW</button>
+        </div>
+    </div>
+
+    <div class="section-container">
+        <div class="section-title">Latest Tollywood Movies</div>
+        <div class="card-container" id="telugu-movies"></div>
+    </div>
+
+    <div class="section-container">
+        <div class="section-title">Popular Telugu Series</div>
+        <div class="card-container" id="telugu-series"></div>
+    </div>
+
+    <script>
+        /* Logic Layer (Simulating Python/Java Backend) */
+
+        // 1. Data Object (Simulating SQL Database from Java)
+        const db = {
+            movies: [
+                { title: "The Raja Saab", img: "https://img1.hotstarext.com/image/upload/f_auto,t_web_vl_3x/sources/r1/cms/prod/the_raja_saab_poster.jpg" }, // Mock link
+                { title: "Thandel", img: "https://www.cinejosh.com/newsimg/newsmainimg/thandel-movie-latest-poster_b_0501241108.jpg" },
+                { title: "Daaku Maharaaj", img: "https://assets-in.bmscdn.com/iedb/movies/images/mobile/thumbnail/xlarge/daaku-maharaaj-et00419827-1731653896.jpg" },
+                { title: "Sankranthiki Vasthunam", img: "https://punjabireels.com/wp-content/uploads/2024/12/Sankranthiki-Vasthunam-Telugu-Movie-Review.jpg" },
+                { title: "Mirai", img: "https://m.media-amazon.com/images/M/MV5BMjA4MDM3MDgtY2I5YS00ZGRiLWI2YzctY2I1ZjNmNDdiODhjXkEyXkFqcGc@._V1_.jpg" }
+            ],
+            series: [
+                { title: "D/O Prasad Rao", img: "https://qqcdnpictest.piyicai.com/img/global/202402/d_o_prasad_rao.jpg" },
+                { title: "3 Roses S2", img: "https://static.toiimg.com/photo/87625143.jpeg" },
+                { title: "Kishkindhapuri", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6A7eE_J..." },
+                { title: "Yakshini", img: "https://m.media-amazon.com/images/M/MV5BNDM1NjQyNTMt..." },
+                { title: "Save The Tigers", img: "https://img1.hotstarext.com/image/upload/f_auto,t_web_vl_3x/sources/r1/cms/prod/8302/1518302-v-d84358a98a00" }
+            ]
+        };
+
+        // 2. Rendering Function (Java Service logic)
+        function renderCategory(data, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = data.map(item => `
+                <div class="card">
+                    <img src="${item.img}" onerror="this.src='https://via.placeholder.com/180x260?text=Telugu+Blockbuster'">
+                    <div class="card-overlay">${item.title}</div>
+                </div>
+            `).join('');
+        }
+
+        // 3. Execution (Simulating Python app initialization)
+        window.onload = () => {
+            renderCategory(db.movies, 'telugu-movies');
+            renderCategory(db.series, 'telugu-series');
+        };
+    </script>
+</body>
+</html>
